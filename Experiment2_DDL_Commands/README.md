@@ -107,61 +107,32 @@ CREATE TABLE Table_Name (
 
 **Question 1**
 ```
-In the Cusomers table, insert a record where some fields are NULL, another record where all fields are filled without any NULL values, and a third record where some fields are filled, and others are left as NULL.
+Create a table named Events with the following columns:
 
-CustomerID  Name          Address      City        ZipCode
-----------  ------------  ----------   ----------  ----------
-306         Diana Prince  Themyscira
-307         Bruce Wayne   Wayne Manor  Gotham      10007
-308         Peter Parker  Queens                   11375
-```
-```sql
-insert into Customers(CustomerID,Name,Address,City,ZipCode)
-values (306,'Diana Prince','Themyscira',NULL,NULL),(307,'Bruce Wayne','Wayne Mano','Gotham',10007),(308,'Peter Parkers','Queens',NULL,'11375')
-```
-
-**Output:**
-
-<img width="1290" height="287" alt="image" src="https://github.com/user-attachments/assets/c855d453-f645-44b6-9a44-a70b928215ee" />
-
-
-**Question 2**
-```
-Write a SQL Query  to add attribute ISBN as varchar(30) and domain_dept as varchar(30) in the table 'books'
-
- 
-
- 
-
+EventID as INTEGER
+EventName as TEXT
+EventDate as DATE
 For example:
 
 Test	Result
-pragma table_info('books');
+pragma table_info('Events');
 cid         name        type        notnull     dflt_value  pk
 ----------  ----------  ----------  ----------  ----------  ----------
-0           book_id     INT         0                       1
-1           title       VARCHAR(15  0                       0
-2           author      VARCHAR(10  0                       0
-3           genre       VARCHAR(50  0                       0
-4           publicatio  INT         0                       0
-5           ISBN        varchar(30  0                       0
-6           domain_dep  varchar(30  0                       0
+0           EventID     INTEGER     0                       0
+1           EventName   TEXT        0                       0
+2           EventDate   DATE        0                       0
 
 ```
-
 ```sql
-ALTER TABLE books
-ADD COLUMN ISBN varchar(30);
-ALTER TABLE books
-ADD COLUMN domain_dept varchar(30);
+CREATE TABLE Events(EventID INTEGER,EventName TEXT,EventDate DATE);
 ```
-
 **Output:**
 
-<img width="1303" height="296" alt="image" src="https://github.com/user-attachments/assets/ac347274-0ef4-465d-88d7-706a24e9987e" />
+<img width="1288" height="340" alt="image" src="https://github.com/user-attachments/assets/46b80bcb-d020-4a2b-b3ac-12e95bd634ce" />
 
 
-**Question 3**
+
+**Question 2**
 ```
 Create a table named Invoices with the following constraints:
 InvoiceID as INTEGER should be the primary key.
@@ -180,7 +151,6 @@ InvoiceID   InvoiceDate  Amount      DueDate     OrderID
 1           2024-08-01   100.0       2024-09-01  1
 ```
 
-
 ```sql
 CREATE TABLE Invoices(
 InvoiceID INTEGER PRIMARY KEY,
@@ -190,130 +160,106 @@ DueDate DATE CHECK (DueDate>InvoiceDate),
 OrderID INTEGER,
 FOREIGN KEY (OrderID) REFERENCES
 Orders(OrderID)
-)
+);
 ```
 
 **Output:**
-<img width="1180" height="170" alt="image" src="https://github.com/user-attachments/assets/ddf8a8d4-57bd-46d3-aaff-744ea5640f88" />
+
+<img width="1297" height="262" alt="image" src="https://github.com/user-attachments/assets/81191333-3806-40fc-9ccf-2f70f6dd1e7a" />
+
+
+**Question 3**
+```
+Create a table named Bonuses with the following constraints:
+BonusID as INTEGER should be the primary key.
+EmployeeID as INTEGER should be a foreign key referencing Employees(EmployeeID).
+BonusAmount as REAL should be greater than 0.
+BonusDate as DATE.
+Reason as TEXT should not be NULL.
+For example:
+
+Test	Result
+INSERT INTO Bonuses (BonusID, EmployeeID, BonusAmount, BonusDate, Reason) VALUES (1, 6, 1000.0, '2024-08-01', 'Outstanding performance');
+SELECT * FROM Bonuses;
+BonusID     EmployeeID  BonusAmount  BonusDate   Reason
+----------  ----------  -----------  ----------  -----------------------
+1           6           1000.0       2024-08-01  Outstandin
+```
+
+```sql
+CREATE TABLE Bonuses(
+BonusID INTEGER PRIMARY KEY,
+EmployeeID INTEGER,
+BonusAmount REAL CHECK (BonusAmount>0),
+BonusDate DATE,
+Reason TEXT NOT NULL,
+FOREIGN KEY (EmployeeID) REFERENCES
+Employees(EMployeeID));
+```
+
+**Output:**
+
+<img width="1292" height="268" alt="image" src="https://github.com/user-attachments/assets/aa088409-8ad7-4cee-9a52-1880c334ea10" />
 
 
 **Question 4**
 ```
-Create a new table named orders with the following specifications:
-ord_id as TEXT with a length of 4.
-item_id as TEXT.
-ord_date as DATE.
-ord_qty as INTEGER.
-cost as INTEGER.
-The primary key is a composite key consisting of item_id and ord_date.
-ord_id and item_id should not accept NULL
+Insert all customers from Old_customers into Customers
+
+Table attributes are CustomerID, Name, Address, Email
+
 For example:
 
 Test	Result
-INSERT INTO orders (ord_id, item_id, ord_date, ord_qty, cost) VALUES ('O001', 'I001', '2023-08-01', 10, 100);
-SELECT * FROM orders;
-ord_id      item_id     ord_date    ord_qty     cost
-----------  ----------  ----------  ----------  ----------
-O001        I001        2023-08-01  10          100
+select * from Customers;
+CustomerID  Name             Address         Email
+----------  ---------------  --------------  ---------------------
+301         Michael Johnson  123 Elm Street  michael.j@example.com
+302         Sarah Lee        456 Oak Avenue  sarah.lee@example.com
+303         David Wilson     789 Pine Road   david.w@example.com
 
 ```
 
 ```sql
-CREATE TABLE orders(
-ord_id TEXT CHECK (LENGTH(ord_id)=4) NOT NULL,
-item_id TEXT NOT NULL,
-ord_date DATE ,
-ord_qty INTEGER,
-cost INTEGER,
-PRIMARY KEY (item_id,ord_date)
-);
+INSERT into Customers(CustomerID, Name, Address, Email) SELECT CustomerID, Name, Address, Email FROM Old_customers;
 ```
 
 **Output:**
 
-<img width="1167" height="196" alt="image" src="https://github.com/user-attachments/assets/cc27c4f6-08dc-4d64-80a9-fe3c682cd46e" />
+<img width="1297" height="262" alt="image" src="https://github.com/user-attachments/assets/4d94bd3d-8d08-45e4-bc60-2a7ba5873a78" />
 
 
 **Question 5**
 ```
-Create a new table named item with the following specifications and constraints:
-item_id as TEXT and as primary key.
-item_desc as TEXT.
-rate as INTEGER.
-icom_id as TEXT with a length of 4.
-icom_id is a foreign key referencing com_id in the company table.
-The foreign key should cascade updates and deletes.
-item_desc and rate should not accept NULL.
+Insert a new product with ProductID 101, Name Laptop, Category Electronics, Price 1500, and Stock 50 into the Products table.
+
 For example:
 
 Test	Result
-INSERT INTO item VALUES("ITM5","Charlie Gold",700,"COM4");
-UPDATE company SET com_id='COM5' WHERE com_id='COM4';
-SELECT * FROM item;
-item_id     item_desc     rate        icom_id
-----------  ------------  ----------  ----------
-ITM5        Charlie Gold  700         COM5
-
+SELECT * FROM Products WHERE ProductID = 101;
+ProductID   Name        Category     Price       Stock
+----------  ----------  -----------  ----------  ----------
+101         Laptop      Electronics  1500        50
 
 
 ```
 
 ```sql
-CREATE TABLE item (
-    item_id TEXT PRIMARY KEY,
-    item_desc TEXT NOT NULL,
-    rate INTEGER NOT NULL,
-    icom_id TEXT(4) CHECK (LENGTH(icom_id)=4),
-    FOREIGN KEY (icom_id) REFERENCES company(com_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-    
-);
+INSERT INTO Products (ProductID, Name, Category, Price, Stock)
+VALUES (101, 'Laptop', 'Electronics', 1500, 50);
 ```
 
 **Output:**
 
-<img width="800" height="216" alt="image" src="https://github.com/user-attachments/assets/725e8762-3c55-4f5d-9ed0-e6053d1dbb73" />
+<img width="1287" height="207" alt="image" src="https://github.com/user-attachments/assets/4e0c581d-74bd-4a53-8648-ca831cf66df6" />
 
 
 **Question 6**
 ```
-Insert the below data into the Books table, allowing the Publisher and Year columns to take their default values.
-
-ISBN             Title                 Author
----------------  --------------------  ---------------
-978-6655443321   Big Data Analytics    Karen Adams
-
-Note: The Publisher and Year columns will use their default values.
- 
- 
-For example:
-
-Test	Result
-SELECT ISBN, Title, Author
-FROM Books 
-
-
-ISBN             Title                 Author
----------------  --------------------  ---------------
-978-6655443321   Big Data Analytics    Karen Adams
-
-```
-
-```sql
-INSERT INTO Books (ISBN ,Title , Author)
-VALUES ('978-6655443321' ,'Big Data Analytics','Karen Adams');
-```
-
-**Output:**
-
-<img width="774" height="203" alt="image" src="https://github.com/user-attachments/assets/fd16a8e1-6cfd-4193-b9fa-53a9e29ee546" />
-
-
-**Question 7**
-```
-Write a SQL Query  to change the name of attribute "name" to "first_name"  and add mobilenumber as number ,DOB as Date in the table Companies. 
-
+Write an SQL Query to add the attributes designation, net_salary, and dob to the Companies table with the following data types:
+designation as VARCHAR(50)
+net_salary as NUMBER
+dob as DATE
  
 
  
@@ -325,54 +271,28 @@ pragma table_info('Companies');
 cid         name        type        notnull     dflt_value  pk
 ----------  ----------  ----------  ----------  ----------  ----------
 0           id          int         0                       0
-1           first_name  varchar(50  0                       0
+1           name        varchar(50  0                       0
 2           address     text        0                       0
 3           email       varchar(50  0                       0
 4           phone       varchar(10  0                       0
-5           mobilenumb  number      0                       0
-6           DOB         Date        0                       0
+5           designatio  varchar(50  0                       0
+6           net_salary  number      0                       0
+7           dob         date        0                       0
 
 ```
 
 ```sql
-ALTER table Companies rename column name TO first_name;
-ALTER table Companies add column mobilenumber number;
-ALTER table Companies add column DOB Date;
+ALTER TABLE Companies ADD COLUMN designation varchar(50);
+ALTER TABLE Companies ADD COLUMN net_salary number;
+ALTER TABLE Companies ADD COLUMN dob date;
 ```
 
 **Output:**
 
-<img width="1088" height="231" alt="image" src="https://github.com/user-attachments/assets/91664306-9de6-4665-b6a7-f4f15e730194" />
+<img width="1302" height="356" alt="image" src="https://github.com/user-attachments/assets/1761c1c6-dc54-4532-ab46-b836f997b8d3" />
 
 
-**Question 8**
-```
-Insert all books from Out_of_print_books into Books
-
-Table attributes are ISBN, Title, Author, Publisher, YearPublished
-
-For example:
-
-Test	Result
-select * from Books;
-ISBN            Title           Author              Publisher      YearPublished
---------------  --------------  ------------------  -------------  -------------
-978-1234567890  The Lost World  Arthur Conan Doyle  Vintage Books  1912
-978-0987654321  Gone with the   Margaret Mitchell   Macmillan      1936
-978-1122334455  Moby Dick       Herman Melville     Harper & Brot  1851
-```
-
-```sql
-insert into Books(ISBN,Title,Author,Publisher,YearPublished)
-SELECT ISBN,Title,Author,Publisher,YearPublished from Out_of_print_books
-```
-
-**Output:**
-
-<img width="973" height="172" alt="image" src="https://github.com/user-attachments/assets/dcf45f53-5710-4175-9535-b69b43e2ae52" />
-
-
-**Question 9**
+**Question 7**
 ```
 Create a table named Products with the following constraints:
 
@@ -388,44 +308,123 @@ VALUES (1, NULL,0,5);
 Error: NOT NULL constraint failed: Products.ProductName
 
 ```
+
 ```sql
+
+
 CREATE TABLE Products(ProductID PRIMARY KEY,ProductName NOT NULL,Price real check(price>0),Stock INTEGER CHECK(Stock>=0));
 ```
 
 **Output:**
 
-<img width="789" height="187" alt="image" src="https://github.com/user-attachments/assets/dc49fd60-0533-4f84-9231-a0f0d18ae969" />
+
+<img width="1097" height="262" alt="image" src="https://github.com/user-attachments/assets/67b66a18-78de-42b6-b5cf-cdc6ad5f988f" />
 
 
-**Question 10**
+**Question 8**
 ```
-Create a table named Products with the following columns:
+Create a table named Employees with the following constraints:
 
-ProductID as INTEGER
-ProductName as TEXT
-Price as REAL
-Stock as INTEGER
+EmployeeID should be the primary key.
+FirstName and LastName should be NOT NULL.
+Email should be unique.
+Salary should be greater than 0.
+DepartmentID should be a foreign key referencing the Departments table.
 For example:
 
 Test	Result
-pragma table_info('Products');
-cid   name        type        notnull     dflt_value  pk
-----  ----------  ----------  ----------  ----------  ----------
-0     ProductID   INTEGER     0                       0
-1     ProductNam  TEXT        0                       0
-2     Price       REAL        0                       0
-3     Stock       INTEGER     0                       0
+-- Attempt to insert a record with NULL FirstName
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, Salary, DepartmentID)
+VALUES (1, NULL, 'Doe', 'john.doe@example.com', 50000, 1);
+Error: NOT NULL constraint failed: Employees.FirstName
 
 ```
 
 ```sql
-CREATE TABLE Products(ProductID INTEGER,ProductName TEXT,Price REAL check(price>0),Stock INTEGER CHECK(Stock>=0));
+CREATE TABLE Employees(
+EmployeeID integer PRIMARY KEY,
+FirstName varchar(100) not null,
+LastName varchar(100) not null,
+Email varchar(100) unique,
+Salary decimal check(Salary>0),
+DepartmentID integer,
+foreign key (DepartmentID) references Departments(DepartmentID)
+);
 ```
 
 **Output:**
 
 
-<img width="884" height="192" alt="image" src="https://github.com/user-attachments/assets/e14af878-29f0-4644-ab3a-5c1af2b68bbd" />
+<img width="1306" height="375" alt="image" src="https://github.com/user-attachments/assets/58264cae-12e6-4853-b877-ebba1a58c23f" />
+
+
+**Question 9**
+```
+Write a SQL Query for inserting the below values in the table Customers
+
+ID               NAME             AGE  ADDRESS     SALARY      
+---------------  ---------------  ---  ----------  ----------  
+1                Ramesh           32   Ahmedabad   2000
+2                Khilan           25   Delhi       1500
+3                Kaushik          23   Kota        2000
+ 
+
+For example:
+
+Test	Result
+SELECT * FROM Customers;
+ID          NAME        AGE         ADDRESS     SALARY
+----------  ----------  ----------  ----------  ----------
+1           Ramesh      32          Ahmedabad   2000
+2           Khilan      25          Delhi       1500
+3           Kaushik     23          Kota        2000
+
+
+```
+```sql
+INSERT INTO Customers (ID, NAME, AGE, ADDRESS, SALARY)
+VALUES
+(1, 'Ramesh', 32, 'Ahmedabad', 2000),
+(2, 'Khilan', 25, 'Delhi', 1500),
+(3, 'Kaushik', 23, 'Kota', 2000);
+```
+
+**Output:**
+
+
+<img width="1295" height="252" alt="image" src="https://github.com/user-attachments/assets/ef09a893-6b53-40eb-8049-f16c621ec4af" />
+
+
+**Question 10**
+```
+Write an SQL query to add a new column email of type TEXT to the Student_details table, and ensure that this column cannot contain NULL values and make default value as 'Invalid'
+
+ 
+
+ 
+
+For example:
+
+Test	Result
+INSERT INTO Student_details (RollNo, Name, Gender, Subject, email) 
+VALUES (1, 'John Doe', 'M', 'Math', 'john@example.com');
+select * from Student_details;
+RollN  Name   Gen  Subject     email
+-----  -----  ---  ----------  ----------------
+1      John   M    Math        john@example.com
+
+```
+
+```sql
+ALTER TABLE Student_details
+ADD COLUMN email TEXT NOT NULL DEFAULT 'Invalid';
+```
+
+**Output:**
+
+
+
+<img width="1302" height="227" alt="image" src="https://github.com/user-attachments/assets/9d144856-8054-481a-9447-9753d7d2bc60" />
 
 
 ## RESULT
